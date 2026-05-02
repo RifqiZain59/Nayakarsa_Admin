@@ -11,11 +11,11 @@
         <div class="relative">
             <p class="text-blue-300 text-sm font-medium mb-1">Selamat datang,</p>
             <h2 class="text-3xl font-extrabold mb-1">{{ auth()->user()->name }} 👋</h2>
-            <p class="text-blue-200 text-sm">Kelola pengguna Absensi Wajah, API Keys, dan langganan dari sini.</p>
+            <p class="text-blue-200 text-sm">Kelola pengguna Absensi Wajah dan langganan dari sini.</p>
         </div>
     </div>
 
-    <!-- Stats Cards -->
+    <!-- Stats Cards (Firebase-driven) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 flex items-center gap-4 hover:shadow-md transition">
             <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
@@ -23,125 +23,86 @@
             </div>
             <div>
                 <p class="text-xs font-semibold uppercase tracking-widest text-slate-400">Total Users</p>
-                <p class="text-3xl font-extrabold text-slate-800 leading-none mt-0.5">{{ $usersCount }}</p>
+                <p class="text-3xl font-extrabold text-slate-800 leading-none mt-0.5" id="stat-total-users">
+                    <span class="inline-block w-8 h-8 bg-slate-100 rounded animate-pulse"></span>
+                </p>
+            </div>
+        </div>
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 flex items-center gap-4 hover:shadow-md transition">
+            <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/></svg>
+            </div>
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-widest text-slate-400">Sekolah</p>
+                <p class="text-3xl font-extrabold text-slate-800 leading-none mt-0.5" id="stat-sekolah">
+                    <span class="inline-block w-8 h-8 bg-slate-100 rounded animate-pulse"></span>
+                </p>
+            </div>
+        </div>
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 flex items-center gap-4 hover:shadow-md transition">
+            <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center shrink-0">
+                <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"/></svg>
+            </div>
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-widest text-slate-400">Universitas</p>
+                <p class="text-3xl font-extrabold text-slate-800 leading-none mt-0.5" id="stat-universitas">
+                    <span class="inline-block w-8 h-8 bg-slate-100 rounded animate-pulse"></span>
+                </p>
             </div>
         </div>
         <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 flex items-center gap-4 hover:shadow-md transition">
             <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0">
-                <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
             </div>
             <div>
-                <p class="text-xs font-semibold uppercase tracking-widest text-slate-400">Langganan Aktif</p>
-                <p class="text-3xl font-extrabold text-slate-800 leading-none mt-0.5">{{ $activeSubscriptions }}</p>
-            </div>
-        </div>
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 flex items-center gap-4 hover:shadow-md transition">
-            <div class="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center shrink-0">
-                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-            </div>
-            <div>
-                <p class="text-xs font-semibold uppercase tracking-widest text-slate-400">Total Langganan</p>
-                <p class="text-3xl font-extrabold text-slate-800 leading-none mt-0.5">{{ $subscriptionsCount }}</p>
-            </div>
-        </div>
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 flex items-center gap-4 hover:shadow-md transition">
-            <div class="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center shrink-0">
-                <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-            </div>
-            <div>
-                <p class="text-xs font-semibold uppercase tracking-widest text-slate-400">API Keys Aktif</p>
-                <p class="text-3xl font-extrabold text-slate-800 leading-none mt-0.5">{{ $apiKeysCount }}</p>
+                <p class="text-xs font-semibold uppercase tracking-widest text-slate-400">Perusahaan</p>
+                <p class="text-3xl font-extrabold text-slate-800 leading-none mt-0.5" id="stat-perusahaan">
+                    <span class="inline-block w-8 h-8 bg-slate-100 rounded animate-pulse"></span>
+                </p>
             </div>
         </div>
     </div>
 
     <!-- Charts Row -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <!-- Donut Chart: User by Role -->
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-            <h3 class="text-sm font-bold text-slate-800 mb-1">Distribusi Pengguna</h3>
-            <p class="text-xs text-slate-400 mb-4">Perbandingan role superadmin vs user</p>
-            <div class="flex items-center justify-center">
-                <canvas id="roleChart" width="220" height="220" style="max-width:220px;max-height:220px;"></canvas>
-            </div>
-            <div class="flex justify-center gap-6 mt-4">
-                <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-blue-500"></span><span class="text-xs text-slate-600 font-medium">Superadmin ({{ $superadminCount }})</span></div>
-                <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-slate-300"></span><span class="text-xs text-slate-600 font-medium">User ({{ $regularUserCount }})</span></div>
-            </div>
-        </div>
-
         <!-- Bar Chart: Users by Institution -->
         <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
             <h3 class="text-sm font-bold text-slate-800 mb-1">Pengguna per Institusi</h3>
             <p class="text-xs text-slate-400 mb-4">Data dari Sekolah, Universitas & Perusahaan</p>
             <canvas id="instChart" height="220"></canvas>
         </div>
+
+        <!-- Donut Chart: Subscription Plans -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+            <h3 class="text-sm font-bold text-slate-800 mb-1">Distribusi Langganan</h3>
+            <p class="text-xs text-slate-400 mb-4">Persentase paket langganan yang digunakan</p>
+            <div class="flex items-center justify-center">
+                <canvas id="subChart" width="220" height="220" style="max-width:220px;max-height:220px;"></canvas>
+            </div>
+            <div class="flex flex-wrap justify-center gap-3 mt-4" id="sub-chart-legend"></div>
+        </div>
     </div>
 
-    <!-- Users Table -->
+    <!-- Recent Users Table (Firebase) -->
     <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
         <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
             <div>
                 <h3 class="text-base font-bold text-slate-800">Pengguna Terbaru</h3>
-                <p class="text-xs text-slate-400 mt-0.5">5 pengguna yang baru bergabung</p>
+                <p class="text-xs text-slate-400 mt-0.5">5 pengguna yang baru bergabung dari Firebase</p>
             </div>
-            <span class="text-xs bg-slate-100 text-slate-600 px-3 py-1.5 rounded-full font-semibold">{{ $usersCount }} Total</span>
+            <span class="text-xs bg-slate-100 text-slate-600 px-3 py-1.5 rounded-full font-semibold" id="table-total-badge">— Total</span>
         </div>
         <div class="overflow-x-auto">
             <table class="min-w-full">
                 <thead><tr class="bg-slate-50 border-b border-slate-100">
                     <th class="px-6 py-3.5 text-left text-[11px] font-bold text-slate-400 uppercase tracking-widest">#</th>
                     <th class="px-6 py-3.5 text-left text-[11px] font-bold text-slate-400 uppercase tracking-widest">User</th>
-                    <th class="px-6 py-3.5 text-left text-[11px] font-bold text-slate-400 uppercase tracking-widest">Role</th>
+                    <th class="px-6 py-3.5 text-left text-[11px] font-bold text-slate-400 uppercase tracking-widest">Tipe</th>
                     <th class="px-6 py-3.5 text-left text-[11px] font-bold text-slate-400 uppercase tracking-widest">Langganan</th>
-                    <th class="px-6 py-3.5 text-left text-[11px] font-bold text-slate-400 uppercase tracking-widest">Aksi</th>
+                    <th class="px-6 py-3.5 text-left text-[11px] font-bold text-slate-400 uppercase tracking-widest">Institusi</th>
                 </tr></thead>
-                <tbody class="divide-y divide-slate-50">
-                    @forelse($users as $index => $user)
-                    <tr class="hover:bg-slate-50 transition">
-                        <td class="px-6 py-4 text-sm text-slate-400">{{ $index + 1 }}</td>
-                        <td class="px-6 py-4">
-                            <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-blue-400 to-indigo-500 flex items-center justify-center text-white text-sm font-bold shrink-0">{{ strtoupper(substr($user->name,0,1)) }}</div>
-                                <div><p class="text-sm font-semibold text-slate-800">{{ $user->name }}</p><p class="text-xs text-slate-400">{{ $user->email }}</p></div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4">
-                            @if($user->role === 'superadmin')
-                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-indigo-100 text-indigo-700"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Superadmin</span>
-                            @else
-                                <span class="inline-flex px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-600">User</span>
-                            @endif
-                        </td>
-                        <td class="px-6 py-4">
-                            @if($user->subscriptions->count() > 0)
-                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-700"><span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>{{ $user->subscriptions->last()->plan_name }}</span>
-                            @else
-                                <span class="inline-flex px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-500">Tidak ada</span>
-                            @endif
-                        </td>
-                        <td class="px-6 py-4">
-                            <div class="flex items-center gap-2">
-                                <form action="{{ route('superadmin.users.apikey', $user->id) }}" method="POST">@csrf<button type="submit" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 transition">🔑 API Key</button></form>
-                                <button onclick="document.getElementById('sub-modal-{{ $user->id }}').classList.remove('hidden')" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 transition">+ Subscribe</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- Subscription Modal -->
-                    <div id="sub-modal-{{ $user->id }}" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-                        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="document.getElementById('sub-modal-{{ $user->id }}').classList.add('hidden')"></div>
-                        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md z-10 overflow-hidden">
-                            <div class="bg-gradient-to-r from-[#0f172a] to-[#1e3a5f] px-6 py-5"><h3 class="text-lg font-bold text-white">Tambah Langganan</h3><p class="text-blue-300 text-sm mt-0.5">Untuk: <span class="font-semibold text-blue-200">{{ $user->name }}</span></p></div>
-                            <form action="{{ route('superadmin.users.subscription', $user->id) }}" method="POST" class="p-6 space-y-4">@csrf
-                                <div><label class="block text-sm font-semibold text-slate-700 mb-1.5">Nama Paket</label><input type="text" name="plan_name" required placeholder="e.g. Premium Plan" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"></div>
-                                <div><label class="block text-sm font-semibold text-slate-700 mb-1.5">Durasi (Hari)</label><input type="number" name="duration_days" required min="1" placeholder="30" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"></div>
-                                <div class="flex gap-3 pt-2"><button type="submit" class="flex-1 py-2.5 bg-[#0f172a] hover:bg-slate-800 text-white text-sm font-semibold rounded-xl transition">Simpan</button><button type="button" onclick="document.getElementById('sub-modal-{{ $user->id }}').classList.add('hidden')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 text-sm font-semibold rounded-xl transition">Batal</button></div>
-                            </form>
-                        </div>
-                    </div>
-                    @empty
-                    <tr><td colspan="5" class="px-6 py-12 text-center text-slate-400"><p class="font-semibold text-sm">Belum ada pengguna</p></td></tr>
-                    @endforelse
+                <tbody class="divide-y divide-slate-50" id="recent-users-body">
+                    <tr><td colspan="5" class="px-6 py-12 text-center text-slate-400"><span class="font-semibold text-sm">Memuat data dari Firebase...</span></td></tr>
                 </tbody>
             </table>
         </div>
@@ -149,25 +110,38 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Donut - Role distribution
-    new Chart(document.getElementById('roleChart'), {
-        type: 'doughnut',
-        data: {
-            labels: ['Superadmin', 'User'],
-            datasets: [{ data: [{{ $superadminCount }}, {{ $regularUserCount }}], backgroundColor: ['#3b82f6','#e2e8f0'], borderWidth: 0, hoverOffset: 6 }]
-        },
-        options: { cutout: '72%', plugins: { legend: { display: false } } }
-    });
+const SUPERADMIN_ID = "{{ auth()->user()->email }}";
 
-    // Bar - Per Institution
+document.addEventListener('DOMContentLoaded', async function() {
+    const db = firebase.firestore();
+
+    // Fetch all 3 sub-collections
+    const [sekolahSnap, univSnap, perusahaanSnap] = await Promise.all([
+        db.collection('superadmin').doc(SUPERADMIN_ID).collection('sekolah').get(),
+        db.collection('superadmin').doc(SUPERADMIN_ID).collection('universitas').get(),
+        db.collection('superadmin').doc(SUPERADMIN_ID).collection('perusahaan').get()
+    ]);
+
+    const sekolahCount = sekolahSnap.size;
+    const univCount = univSnap.size;
+    const perusahaanCount = perusahaanSnap.size;
+    const totalUsers = sekolahCount + univCount + perusahaanCount;
+
+    // Update stat cards
+    document.getElementById('stat-total-users').textContent = totalUsers;
+    document.getElementById('stat-sekolah').textContent = sekolahCount;
+    document.getElementById('stat-universitas').textContent = univCount;
+    document.getElementById('stat-perusahaan').textContent = perusahaanCount;
+    document.getElementById('table-total-badge').textContent = totalUsers + ' Total';
+
+    // Bar Chart - Per Institution
     new Chart(document.getElementById('instChart'), {
         type: 'bar',
         data: {
             labels: ['🏫 Sekolah', '🎓 Universitas', '🏢 Perusahaan'],
             datasets: [{
                 label: 'Pengguna',
-                data: [{{ $sekolahCount }}, {{ $universitasCount }}, {{ $perusahaanCount }}],
+                data: [sekolahCount, univCount, perusahaanCount],
                 backgroundColor: ['#3b82f6', '#6366f1', '#10b981'],
                 borderRadius: 10,
                 borderSkipped: false
@@ -181,6 +155,106 @@ document.addEventListener('DOMContentLoaded', function() {
                 x: { grid: { display: false } }
             }
         }
+    });
+
+    // Collect all users for subscription chart + recent users table
+    const allUsers = [];
+    const planCounts = {};
+
+    function processSnapshot(snap, typeName) {
+        snap.forEach(doc => {
+            const d = doc.data();
+            d._type = typeName;
+            d._createdAtMs = d.createdAt ? d.createdAt.toMillis() : 0;
+            allUsers.push(d);
+
+            if (d.subscription && d.subscription.isActive && d.subscription.planName) {
+                const plan = d.subscription.planName;
+                planCounts[plan] = (planCounts[plan] || 0) + 1;
+            }
+        });
+    }
+    processSnapshot(sekolahSnap, 'Sekolah');
+    processSnapshot(univSnap, 'Universitas');
+    processSnapshot(perusahaanSnap, 'Perusahaan');
+
+    // Donut Chart - Subscription distribution
+    const planLabels = Object.keys(planCounts);
+    const planData = Object.values(planCounts);
+    const planColors = ['#3b82f6', '#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+
+    if (planLabels.length > 0) {
+        new Chart(document.getElementById('subChart'), {
+            type: 'doughnut',
+            data: {
+                labels: planLabels,
+                datasets: [{
+                    data: planData,
+                    backgroundColor: planColors.slice(0, planLabels.length),
+                    borderWidth: 0,
+                    hoverOffset: 6
+                }]
+            },
+            options: {
+                cutout: '72%',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(ctx) {
+                                const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                                const pct = ((ctx.parsed / total) * 100).toFixed(1);
+                                return `${ctx.label}: ${ctx.parsed} (${pct}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Legend
+        const legendEl = document.getElementById('sub-chart-legend');
+        const totalSubs = planData.reduce((a, b) => a + b, 0);
+        planLabels.forEach((label, i) => {
+            const pct = ((planData[i] / totalSubs) * 100).toFixed(1);
+            legendEl.innerHTML += `<div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full" style="background:${planColors[i]}"></span><span class="text-xs text-slate-600 font-medium">${label} (${pct}%)</span></div>`;
+        });
+    } else {
+        document.getElementById('subChart').parentElement.innerHTML = '<div class="flex items-center justify-center h-[220px] text-slate-400 text-sm">Belum ada data langganan</div>';
+    }
+
+    // Recent users table (sorted by createdAt desc, top 5)
+    allUsers.sort((a, b) => b._createdAtMs - a._createdAtMs);
+    const recent = allUsers.slice(0, 5);
+    const tbody = document.getElementById('recent-users-body');
+    tbody.innerHTML = '';
+
+    if (recent.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-12 text-center text-slate-400"><p class="font-semibold text-sm">Belum ada pengguna</p></td></tr>';
+        return;
+    }
+
+    const typeColors = { 'Sekolah': 'bg-blue-100 text-blue-700', 'Universitas': 'bg-indigo-100 text-indigo-700', 'Perusahaan': 'bg-emerald-100 text-emerald-700' };
+
+    recent.forEach((user, idx) => {
+        const initials = user.name ? user.name.charAt(0).toUpperCase() : '?';
+        const planHtml = (user.subscription && user.subscription.isActive)
+            ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-700"><span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>${user.subscription.planName}</span>`
+            : '<span class="inline-flex px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-500">Tidak ada</span>';
+
+        tbody.innerHTML += `
+        <tr class="hover:bg-slate-50 transition">
+            <td class="px-6 py-4 text-sm text-slate-400">${idx + 1}</td>
+            <td class="px-6 py-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-blue-400 to-indigo-500 flex items-center justify-center text-white text-sm font-bold shrink-0">${initials}</div>
+                    <div><p class="text-sm font-semibold text-slate-800">${user.name || '—'}</p><p class="text-xs text-slate-400">${user.email || '—'}</p></div>
+                </div>
+            </td>
+            <td class="px-6 py-4"><span class="inline-flex px-2.5 py-1 rounded-full text-[11px] font-bold ${typeColors[user._type] || 'bg-slate-100 text-slate-600'}">${user._type}</span></td>
+            <td class="px-6 py-4">${planHtml}</td>
+            <td class="px-6 py-4"><span class="text-sm text-slate-600 font-medium">${user.institutionName || '—'}</span></td>
+        </tr>`;
     });
 });
 </script>

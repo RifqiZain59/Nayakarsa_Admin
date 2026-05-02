@@ -14,27 +14,7 @@ class SuperadminController extends Controller
 {
     public function dashboard()
     {
-        $usersCount            = User::count();
-        $subscriptionsCount    = Subscription::count();
-        $activeSubscriptions   = Subscription::where('is_active', true)->count();
-        $inactiveSubscriptions = Subscription::where('is_active', false)->count();
-        $apiKeysCount          = \Laravel\Sanctum\PersonalAccessToken::count();
-        $superadminCount       = User::where('role', 'superadmin')->count();
-        $regularUserCount      = User::where('role', 'user')->count();
-
-        // Per-institution counts
-        $sekolahCount     = User::where('institution_type', 'sekolah')->count();
-        $universitasCount = User::where('institution_type', 'universitas')->count();
-        $perusahaanCount  = User::where('institution_type', 'perusahaan')->count();
-
-        $users = User::with('subscriptions')->latest()->take(5)->get();
-
-        return view('superadmin.dashboard', compact(
-            'usersCount', 'subscriptionsCount', 'activeSubscriptions',
-            'inactiveSubscriptions', 'apiKeysCount', 'superadminCount',
-            'regularUserCount', 'sekolahCount', 'universitasCount',
-            'perusahaanCount', 'users'
-        ));
+        return view('superadmin.dashboard');
     }
 
     public function users()

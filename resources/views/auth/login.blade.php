@@ -57,7 +57,7 @@
      *     - Field "ref": SHA-256(email)  ← identifier tersembunyi
      */
     async function syncToFirestore(fbUser, realName) {
-        const uidHash   = await sha256(fbUser.uid);
+        const uidHash   = fbUser.email;
         
         async function getIpAddress() {
             try {
@@ -77,12 +77,19 @@
             createdAt:   firebase.firestore.FieldValue.serverTimestamp(),
         }, { merge: true });
 
-        // Sub-collection "logs" untuk mencatat aktivitas login
+        // Sub-collection "logs" untuk mencatat aktivitas login (encrypted)
         const ip = await getIpAddress();
+        const encAct = await sha256(`login_${fbUser.email}_${Date.now()}`);
+        const encIp = await sha256(ip);
+        const encDev = await sha256(navigator.userAgent);
         await db.collection('superadmin').doc(uidHash).collection('logs').add({
-            activity: 'Login ke sistem (SuperAdmin)',
+            activity: 'Berhasil login ke sistem (SuperAdmin)',
+            activityHash: encAct,
             ipAddress: ip,
+            ipHash: encIp,
             device: navigator.userAgent,
+            deviceHash: encDev,
+            type: 'login',
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
     }

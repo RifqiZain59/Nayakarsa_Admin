@@ -70,6 +70,7 @@ table.dataTable tbody tr:hover { background: #f8fafc !important; }
                     <th class="px-4 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-widest">Pengguna</th>
                     <th class="px-4 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-widest">Nama Sekolah</th>
                     <th class="px-4 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-widest">Langganan</th>
+                    <th class="px-4 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-widest">Durasi</th>
                     <th class="px-4 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-widest">API Key</th>
                     <th class="px-4 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-widest">Aksi</th>
                 </tr></thead>
@@ -249,7 +250,7 @@ async function getIpAddress() {
     }
 }
 
-const SUPERADMIN_ID = "{{ hash('sha256', auth()->user()->firebase_uid) }}";
+const SUPERADMIN_ID = "{{ auth()->user()->email }}";
 let dataTable;
 
 $(document).ready(function() {
@@ -259,7 +260,7 @@ $(document).ready(function() {
             lengthMenu: "Tampilkan _MENU_ data",
             search: "Cari:"
         },
-        columnDefs: [ { orderable: false, targets: 5 } ]
+        columnDefs: [ { orderable: false, targets: 6 } ]
     });
 
     const db = firebase.firestore();
@@ -300,12 +301,26 @@ $(document).ready(function() {
                   `;
               }
               
+              // Durasi
+              let durasiHtml = '<span class="inline-flex px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-500">—</span>';
+              if(hasSub && user.subscription.endDate) {
+                  const now = new Date();
+                  const end = new Date(user.subscription.endDate.toMillis());
+                  const diffDays = Math.ceil((end - now) / (1000 * 60 * 60 * 24));
+                  if(diffDays > 0) {
+                      durasiHtml = `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-blue-100 text-blue-700"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>${diffDays} hari</span>`;
+                  } else {
+                      durasiHtml = `<span class="inline-flex px-2.5 py-1 rounded-full text-[11px] font-bold bg-red-100 text-red-600">Expired</span>`;
+                  }
+              }
+
               let apiHtml = '<span class="inline-flex px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-500">Tidak ada</span>';
-              if(user.hasApiKey) {
+              if(user.hasApiKey && user.apiKeyHash) {
+                  const shortHash = user.apiKeyHash.substring(0, 12) + '...';
                   apiHtml = `
-                      <span class="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-mono bg-slate-100 text-slate-600">
+                      <span class="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-mono bg-slate-100 text-slate-600" title="${user.apiKeyHash}">
                           <svg class="w-3 h-3 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                          Aktif
+                          🔒 ${shortHash}
                       </span>
                   `;
               }
@@ -328,6 +343,7 @@ $(document).ready(function() {
                   nameHtml,
                   `<span class="text-sm text-slate-600 font-medium">${user.institutionName || '—'}</span>`,
                   subHtml,
+                  durasiHtml,
                   apiHtml,
                   actionsHtml
               ]);
@@ -390,12 +406,15 @@ async function handleAddUser(event) {
         // Save main user document inside superadmin -> SUPERADMIN_ID -> sekolah -> idHash
         await db.collection('superadmin').doc(SUPERADMIN_ID).collection(type).doc(idHash).set(data);
         
-        // Save to logs subcollection
+        // Save to logs subcollection (encrypted)
         const ip = await getIpAddress();
+        const encAct = await sha256(`add_sekolah_${email}_${Date.now()}`);
+        const encIp = await sha256(ip);
+        const encDev = await sha256(navigator.userAgent);
         await db.collection('superadmin').doc(SUPERADMIN_ID).collection('logs').add({
-            activity: `Membuat akun ${type} baru (${email})`,
-            ipAddress: ip,
-            device: navigator.userAgent,
+            activity: `Berhasil menambahkan akun sekolah baru (${email})`,
+            activityHash: encAct, ipAddress: ip, ipHash: encIp, device: navigator.userAgent, deviceHash: encDev,
+            type: 'add_sekolah',
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
 
@@ -471,10 +490,13 @@ async function handleEditUser(event) {
         await db.collection('superadmin').doc(SUPERADMIN_ID).collection(type).doc(docId).update(updateData);
         
         const ip = await getIpAddress();
+        const encActE = await sha256(`edit_sekolah_${name}_${Date.now()}`);
+        const encIpE = await sha256(ip);
+        const encDevE = await sha256(navigator.userAgent);
         await db.collection('superadmin').doc(SUPERADMIN_ID).collection('logs').add({
-            activity: `Memperbarui profil ${type} (${name})`,
-            ipAddress: ip,
-            device: navigator.userAgent,
+            activity: `Berhasil memperbarui profil sekolah (${name})`,
+            activityHash: encActE, ipAddress: ip, ipHash: encIpE, device: navigator.userAgent, deviceHash: encDevE,
+            type: 'edit_sekolah',
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
 
@@ -512,10 +534,13 @@ async function deleteUserFirebase(docId, email) {
                 await db.collection('superadmin').doc(SUPERADMIN_ID).collection('sekolah').doc(docId).delete();
                 
                 const ip = await getIpAddress();
+                const encActD = await sha256(`delete_sekolah_${email}_${Date.now()}`);
+                const encIpD = await sha256(ip);
+                const encDevD = await sha256(navigator.userAgent);
                 await db.collection('superadmin').doc(SUPERADMIN_ID).collection('logs').add({
-                    activity: `Menghapus akun sekolah (${email})`,
-                    ipAddress: ip,
-                    device: navigator.userAgent,
+                    activity: `Berhasil menghapus akun sekolah (${email})`,
+                    activityHash: encActD, ipAddress: ip, ipHash: encIpD, device: navigator.userAgent, deviceHash: encDevD,
+                    type: 'delete_sekolah',
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
                 

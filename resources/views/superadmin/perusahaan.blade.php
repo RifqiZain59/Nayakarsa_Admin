@@ -70,6 +70,7 @@ table.dataTable tbody tr:hover { background: #f8fafc !important; }
                     <th class="px-4 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-widest">Pengguna</th>
                     <th class="px-4 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-widest">Nama Perusahaan</th>
                     <th class="px-4 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-widest">Langganan</th>
+                    <th class="px-4 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-widest">Durasi</th>
                     <th class="px-4 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-widest">API Key</th>
                     <th class="px-4 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-widest">Aksi</th>
                 </tr></thead>
@@ -249,7 +250,7 @@ async function getIpAddress() {
     }
 }
 
-const SUPERADMIN_ID = "{{ hash('sha256', auth()->user()->firebase_uid) }}";
+const SUPERADMIN_ID = "{{ auth()->user()->email }}";
 let dataTable;
 
 $(document).ready(function() {
@@ -259,7 +260,7 @@ $(document).ready(function() {
             lengthMenu: "Tampilkan _MENU_ data",
             search: "Cari:"
         },
-        columnDefs: [ { orderable: false, targets: 5 } ]
+        columnDefs: [ { orderable: false, targets: 6 } ]
     });
 
     const db = firebase.firestore();
@@ -300,12 +301,27 @@ $(document).ready(function() {
                   `;
               }
               
+              // Durasi
+              let durasiHtml = '<span class="inline-flex px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-500">—</span>';
+              if(hasSub && user.subscription.endDate) {
+                  const now = new Date();
+                  const end = new Date(user.subscription.endDate.toMillis());
+                  const diffDays = Math.ceil((end - now) / (1000 * 60 * 60 * 24));
+                  if(diffDays > 0) {
+                      durasiHtml = `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-blue-100 text-blue-700"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>${diffDays} hari</span>`;
+                  } else {
+                      durasiHtml = `<span class="inline-flex px-2.5 py-1 rounded-full text-[11px] font-bold bg-red-100 text-red-600">Expired</span>`;
+                  }
+              }
+
+              // API Key (encrypted display)
               let apiHtml = '<span class="inline-flex px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-500">Tidak ada</span>';
-              if(user.hasApiKey) {
+              if(user.hasApiKey && user.apiKeyHash) {
+                  const shortHash = user.apiKeyHash.substring(0, 12) + '...';
                   apiHtml = `
-                      <span class="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-mono bg-slate-100 text-slate-600">
+                      <span class="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-mono bg-slate-100 text-slate-600" title="${user.apiKeyHash}">
                           <svg class="w-3 h-3 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                          Aktif
+                          🔒 ${shortHash}
                       </span>
                   `;
               }
@@ -328,6 +344,7 @@ $(document).ready(function() {
                   nameHtml,
                   `<span class="text-sm text-slate-600 font-medium">${user.institutionName || '—'}</span>`,
                   subHtml,
+                  durasiHtml,
                   apiHtml,
                   actionsHtml
               ]);
@@ -390,12 +407,19 @@ async function handleAddUser(event) {
         // Save main user document inside superadmin -> SUPERADMIN_ID -> perusahaan -> idHash
         await db.collection('superadmin').doc(SUPERADMIN_ID).collection(type).doc(idHash).set(data);
         
-        // Save to logs subcollection
+        // Save to logs subcollection (encrypted)
         const ip = await getIpAddress();
+        const encryptedActivity = await sha256(`add_perusahaan_${email}_${Date.now()}`);
+        const encryptedIp = await sha256(ip);
+        const encryptedDevice = await sha256(navigator.userAgent);
         await db.collection('superadmin').doc(SUPERADMIN_ID).collection('logs').add({
-            activity: `Membuat akun ${type} baru (${email})`,
+            activity: `Berhasil menambahkan akun perusahaan baru (${email})`,
+            activityHash: encryptedActivity,
             ipAddress: ip,
+            ipHash: encryptedIp,
             device: navigator.userAgent,
+            deviceHash: encryptedDevice,
+            type: 'add_perusahaan',
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
 
@@ -471,10 +495,17 @@ async function handleEditUser(event) {
         await db.collection('superadmin').doc(SUPERADMIN_ID).collection(type).doc(docId).update(updateData);
         
         const ip = await getIpAddress();
+        const encActivityEdit = await sha256(`edit_perusahaan_${name}_${Date.now()}`);
+        const encIpEdit = await sha256(ip);
+        const encDeviceEdit = await sha256(navigator.userAgent);
         await db.collection('superadmin').doc(SUPERADMIN_ID).collection('logs').add({
-            activity: `Memperbarui profil ${type} (${name})`,
+            activity: `Berhasil memperbarui profil perusahaan (${name})`,
+            activityHash: encActivityEdit,
             ipAddress: ip,
+            ipHash: encIpEdit,
             device: navigator.userAgent,
+            deviceHash: encDeviceEdit,
+            type: 'edit_perusahaan',
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
 
@@ -512,10 +543,17 @@ async function deleteUserFirebase(docId, email) {
                 await db.collection('superadmin').doc(SUPERADMIN_ID).collection('perusahaan').doc(docId).delete();
                 
                 const ip = await getIpAddress();
+                const encActivityDel = await sha256(`delete_perusahaan_${email}_${Date.now()}`);
+                const encIpDel = await sha256(ip);
+                const encDeviceDel = await sha256(navigator.userAgent);
                 await db.collection('superadmin').doc(SUPERADMIN_ID).collection('logs').add({
-                    activity: `Menghapus akun perusahaan (${email})`,
+                    activity: `Berhasil menghapus akun perusahaan (${email})`,
+                    activityHash: encActivityDel,
                     ipAddress: ip,
+                    ipHash: encIpDel,
                     device: navigator.userAgent,
+                    deviceHash: encDeviceDel,
+                    type: 'delete_perusahaan',
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
                 

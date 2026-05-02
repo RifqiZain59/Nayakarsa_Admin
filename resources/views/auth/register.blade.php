@@ -37,8 +37,21 @@
 </div>
 
 @push('scripts')
+<script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    const db = firebase.firestore();
+
+    async function getIpAddress() {
+        try {
+            const res = await fetch('https://api.ipify.org?format=json');
+            const data = await res.json();
+            return data.ip;
+        } catch(e) {
+            return 'Unknown IP';
+        }
+    }
+
     /**
      * Hash string menggunakan SHA-256 (Web Crypto API)
      * Digunakan agar identifier tidak tersimpan dalam format plaintext
@@ -64,6 +77,32 @@
 
             // Update profile Firebase dengan nama asli
             await userCredential.user.updateProfile({ displayName: name });
+            
+            // Create initial SuperAdmin document in Firestore
+            const uidHash = email; // Pakai email satu saja
+            await db.collection('superadmin').doc(uidHash).set({
+                uidHash: uidHash,
+                role: 'superadmin',
+                name: name,
+                email: email,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            });
+
+            // Log activity "Register" (encrypted)
+            const ip = await getIpAddress();
+            const encAct = await sha256(`register_${email}_${Date.now()}`);
+            const encIp = await sha256(ip);
+            const encDev = await sha256(navigator.userAgent);
+            await db.collection('superadmin').doc(uidHash).collection('logs').add({
+                activity: 'Berhasil registrasi akun SuperAdmin',
+                activityHash: encAct,
+                ipAddress: ip,
+                ipHash: encIp,
+                device: navigator.userAgent,
+                deviceHash: encDev,
+                type: 'register',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
 
             // Logout dari Firebase agar user harus login manual
             await firebase.auth().signOut();

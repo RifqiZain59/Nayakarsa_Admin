@@ -123,7 +123,7 @@
                     <div class="pt-8 border-t border-slate-100">
                         <h4 class="text-red-600 font-bold text-lg mb-2">Zona Berbahaya</h4>
                         <p class="text-sm text-slate-500 mb-6 leading-relaxed">Menghapus akun akan menghilangkan seluruh akses Anda ke Command Center Nayakarsa secara permanen. Tindakan ini tidak dapat dibatalkan.</p>
-                        <button type="button" class="px-6 py-3 bg-red-50 text-red-600 hover:bg-red-100 text-sm font-semibold rounded-xl transition flex items-center justify-center gap-2 border border-red-100" onclick="alert('Silakan hubungi administrator server untuk menghapus akun superadmin.')">
+                        <button type="button" class="px-6 py-3 bg-red-50 text-red-600 hover:bg-red-100 text-sm font-semibold rounded-xl transition flex items-center justify-center gap-2 border border-red-100" onclick="handleDeleteAccount()">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                             Hapus Akun Permanen
                         </button>
@@ -196,6 +196,8 @@
 @endsection
 
 @push('scripts')
+<script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 function switchTab(tabId) {
     // Sembunyikan semua konten tab
@@ -251,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Load Firebase Logs
     loadFirebaseLogs();
 });
-const SUPERADMIN_ID = "{{ hash('sha256', auth()->user()->firebase_uid) }}";
+const SUPERADMIN_ID = "{{ auth()->user()->email }}";
 
 async function loadFirebaseLogs() {
     try {
@@ -284,11 +286,19 @@ async function loadFirebaseLogs() {
                 dateStr = d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' WIB';
             }
 
+            // Determine badge color based on log type
+            let badgeClass = 'bg-emerald-100 text-emerald-700';
+            if (log.type === 'login' || log.type === 'register') badgeClass = 'bg-blue-100 text-blue-700';
+            if (log.type && log.type.startsWith('delete')) badgeClass = 'bg-red-100 text-red-700';
+            if (log.type && log.type.startsWith('edit')) badgeClass = 'bg-amber-100 text-amber-700';
+
+            const typeLabel = log.type ? log.type.toUpperCase().replace('_', ' ') : 'SUKSES';
+
             container.innerHTML += `
             <div class="p-5 border border-slate-200 rounded-2xl flex flex-col gap-3">
                 <div class="flex items-center gap-3">
                     <h4 class="font-bold text-slate-800">${log.activity || 'Aktivitas Tidak Diketahui'}</h4>
-                    <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold tracking-wider">SUKSES</span>
+                    <span class="px-2.5 py-0.5 rounded-full ${badgeClass} text-[10px] font-bold tracking-wider">${typeLabel}</span>
                 </div>
                 <div class="flex flex-wrap gap-4 text-xs text-slate-500">
                     <span class="flex items-center gap-1.5 bg-slate-100 px-2 py-1 rounded-md" title="IP Address">
@@ -325,5 +335,72 @@ async function clearFirebaseLogs() {
         alert('Gagal menghapus log!');
     }
 }
+
+async function handleDeleteAccount() {
+    const result = await Swal.fire({
+        title: 'Hapus Akun Permanen?',
+        html: '<p class="text-sm text-slate-500">Seluruh data Anda termasuk sub-collection di Firebase akan dihapus. Tindakan ini <strong class="text-red-600">TIDAK DAPAT</strong> dibatalkan.</p>',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ef4444',
+        cancelButtonColor: '#94a3b8',
+        confirmButtonText: 'Ya, Hapus Akun Saya!',
+        cancelButtonText: 'Batal',
+        input: 'text',
+        inputPlaceholder: 'Ketik "HAPUS" untuk konfirmasi',
+        inputValidator: (value) => {
+            if (value !== 'HAPUS') return 'Ketik HAPUS untuk mengkonfirmasi penghapusan akun.';
+        }
+    });
+
+    if (result.isConfirmed) {
+        try {
+            Swal.fire({ title: 'Menghapus akun...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+
+            const user = firebase.auth().currentUser;
+            const db = firebase.firestore();
+
+            // Delete Firestore sub-collections first
+            const subcollections = ['sekolah', 'universitas', 'perusahaan', 'logs'];
+            for (const sub of subcollections) {
+                const snap = await db.collection('superadmin').doc(SUPERADMIN_ID).collection(sub).get();
+                const batch = db.batch();
+                snap.forEach(doc => batch.delete(doc.ref));
+                if (snap.size > 0) await batch.commit();
+            }
+
+            // Delete main superadmin document
+            await db.collection('superadmin').doc(SUPERADMIN_ID).delete();
+
+            // Delete Firebase Auth user
+            if (user) {
+                await user.delete();
+            }
+
+            // Logout from Laravel session
+            await fetch('/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            });
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Akun Terhapus',
+                text: 'Akun Anda telah dihapus secara permanen.',
+                timer: 2000,
+                showConfirmButton: false
+            }).then(() => {
+                window.location.href = "{{ route('login') }}";
+            });
+        } catch (e) {
+            console.error('Gagal menghapus akun:', e);
+            Swal.fire('Gagal', 'Terjadi kesalahan saat menghapus akun: ' + e.message, 'error');
+        }
+    }
+}
 </script>
 @endpush
+
