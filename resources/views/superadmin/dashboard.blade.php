@@ -3,7 +3,6 @@
 @section('content')
 <div class="space-y-6">
 
-    <!-- Welcome Banner -->
     <div class="relative bg-gradient-to-r from-[#0f172a] via-[#1e3a5f] to-[#1e40af] rounded-2xl px-8 py-7 text-white overflow-hidden shadow-lg">
         <div class="absolute right-0 top-0 w-64 h-full opacity-10">
             <svg viewBox="0 0 200 200" fill="currentColor" class="w-full h-full"><circle cx="160" cy="40" r="80"/><circle cx="60" cy="160" r="60"/></svg>
@@ -15,19 +14,7 @@
         </div>
     </div>
 
-    <!-- Stats Cards (Firebase-driven) -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 flex items-center gap-4 hover:shadow-md transition">
-            <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-            </div>
-            <div>
-                <p class="text-xs font-semibold uppercase tracking-widest text-slate-400">Total Users</p>
-                <p class="text-3xl font-extrabold text-slate-800 leading-none mt-0.5" id="stat-total-users">
-                    <span class="inline-block w-8 h-8 bg-slate-100 rounded animate-pulse"></span>
-                </p>
-            </div>
-        </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
         <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 flex items-center gap-4 hover:shadow-md transition">
             <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
                 <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/></svg>
@@ -63,27 +50,25 @@
         </div>
     </div>
 
-    <!-- Charts Row -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <!-- Bar Chart: Users by Institution -->
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 flex flex-col h-full">
             <h3 class="text-sm font-bold text-slate-800 mb-1">Pengguna per Institusi</h3>
             <p class="text-xs text-slate-400 mb-4">Data dari Sekolah, Universitas & Perusahaan</p>
-            <canvas id="instChart" height="220"></canvas>
+            <div class="flex-grow flex items-center justify-center">
+                <canvas id="instChart" style="width: 100%; height: 220px;"></canvas>
+            </div>
         </div>
 
-        <!-- Donut Chart: Subscription Plans -->
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 flex flex-col h-full">
             <h3 class="text-sm font-bold text-slate-800 mb-1">Distribusi Langganan</h3>
             <p class="text-xs text-slate-400 mb-4">Persentase paket langganan yang digunakan</p>
-            <div class="flex items-center justify-center">
+            <div class="flex-grow flex items-center justify-center">
                 <canvas id="subChart" width="220" height="220" style="max-width:220px;max-height:220px;"></canvas>
             </div>
             <div class="flex flex-wrap justify-center gap-3 mt-4" id="sub-chart-legend"></div>
         </div>
     </div>
 
-    <!-- Recent Users Table (Firebase) -->
     <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
         <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
             <div>
@@ -128,7 +113,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     const totalUsers = sekolahCount + univCount + perusahaanCount;
 
     // Update stat cards
-    document.getElementById('stat-total-users').textContent = totalUsers;
     document.getElementById('stat-sekolah').textContent = sekolahCount;
     document.getElementById('stat-universitas').textContent = univCount;
     document.getElementById('stat-perusahaan').textContent = perusahaanCount;
@@ -138,7 +122,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     new Chart(document.getElementById('instChart'), {
         type: 'bar',
         data: {
-            labels: ['🏫 Sekolah', '🎓 Universitas', '🏢 Perusahaan'],
+            labels: ['Sekolah', 'Universitas', 'Perusahaan'], // Emoji dihapus agar lebih bersih
             datasets: [{
                 label: 'Pengguna',
                 data: [sekolahCount, univCount, perusahaanCount],
@@ -149,6 +133,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false, // Ditambahkan agar responsif mengikuti flex container
             plugins: { legend: { display: false } },
             scales: {
                 y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { precision: 0 } },

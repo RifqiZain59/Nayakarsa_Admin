@@ -38,7 +38,7 @@ table.dataTable tbody tr:hover { background: #f8fafc !important; }
         <div class="relative flex items-center justify-between">
             <div class="flex items-center gap-4">
                 <div class="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center">
-                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/></svg>
                 </div>
                 <div>
                     <p class="text-emerald-300 text-sm font-medium">Kelola Akun</p>
@@ -87,7 +87,7 @@ table.dataTable tbody tr:hover { background: #f8fafc !important; }
     <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg z-10 overflow-hidden">
         <div class="bg-gradient-to-r from-emerald-600 to-emerald-800 px-6 py-5 flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center">
-                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/></svg>
             </div>
             <div>
                 <h3 class="text-lg font-bold text-white">Tambah Akun Sekolah</h3>
@@ -123,28 +123,38 @@ table.dataTable tbody tr:hover { background: #f8fafc !important; }
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 mb-1.5">Nama Paket</label>
-                        <select name="plan_name" class="w-full px-3 py-2.5 rounded-lg border border-emerald-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition bg-white">
-                            <option value="">-- Pilih Paket --</option>
-                            <option value="Basic Plan">Basic Plan</option>
-                            <option value="Standard Plan">Standard Plan</option>
-                            <option value="Premium Plan">Premium Plan</option>
-                            <option value="Enterprise Plan">Enterprise Plan</option>
-                        </select>
+                        <div class="relative">
+                            <select name="plan_name" class="w-full pl-3 pr-10 py-2.5 rounded-lg border border-emerald-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition bg-white text-slate-700 appearance-none cursor-pointer">
+                                <option value="">-- Pilih Paket --</option>
+                                <option value="Basic Plan">Basic Plan</option>
+                                <option value="Standard Plan">Standard Plan</option>
+                                <option value="Premium Plan">Premium Plan</option>
+                                <option value="Enterprise Plan">Enterprise Plan</option>
+                            </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </div>
+                        </div>
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 mb-1.5">Durasi</label>
-                        <select name="duration_days" class="w-full px-3 py-2.5 rounded-lg border border-emerald-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition bg-white">
-                            <option value="0">-- Pilih Durasi --</option>
-                            <option value="30">1 Bulan</option>
-                            <option value="90">3 Bulan</option>
-                            <option value="180">6 Bulan</option>
-                            <option value="365">1 Tahun</option>
-                        </select>
+                        <div class="relative">
+                            <select name="duration_days" class="w-full pl-3 pr-10 py-2.5 rounded-lg border border-emerald-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition bg-white text-slate-700 appearance-none cursor-pointer">
+                                <option value="0">-- Pilih Durasi --</option>
+                                <option value="30">1 Bulan</option>
+                                <option value="90">3 Bulan</option>
+                                <option value="180">6 Bulan</option>
+                                <option value="365">1 Tahun</option>
+                            </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="bg-slate-50 rounded-xl px-4 py-3 flex items-center gap-3 border border-slate-200">
-                <svg class="w-4 h-4 text-green-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                 <p class="text-xs text-slate-600 font-medium">API Key akan dibuat <strong>otomatis</strong> secara aman</p>
             </div>
             <div class="flex gap-3 pt-1">
@@ -170,6 +180,10 @@ table.dataTable tbody tr:hover { background: #f8fafc !important; }
         </div>
         <form id="edit-form" onsubmit="handleEditUser(event)" class="p-6 space-y-4">
             <input type="hidden" name="doc_id" id="edit-doc-id">
+            <input type="hidden" name="current_end_millis" id="edit-end-millis">
+            <input type="hidden" name="old_duration_days" id="edit-old-duration">
+            <input type="hidden" name="edit_quota" id="edit-quota">
+            
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Nama Lengkap <span class="text-red-500">*</span></label>
@@ -190,35 +204,73 @@ table.dataTable tbody tr:hover { background: #f8fafc !important; }
                     <input type="text" name="institution_name" id="edit-institution" placeholder="SMAN 1 Jakarta" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#059669] transition bg-white">
                 </div>
             </div>
+            
             <div class="bg-emerald-50 rounded-xl p-4 space-y-3 border border-emerald-100">
-                <p class="text-xs font-bold text-emerald-700 uppercase tracking-wider flex items-center gap-1.5">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-                    Paket Langganan
-                </p>
-                <div class="grid grid-cols-2 gap-4">
+                <div class="flex justify-between items-center">
+                    <p class="text-xs font-bold text-emerald-700 uppercase tracking-wider flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                        Paket Langganan
+                    </p>
+                    <span id="edit-status-badge" class="text-[10px] bg-slate-200 text-slate-600 px-2.5 py-1 rounded-full font-bold">Memuat...</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1.5">Nama Paket</label>
-                        <select name="plan_name" id="edit-plan-name" class="w-full px-3 py-2.5 rounded-lg border border-emerald-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition bg-white">
-                            <option value="">-- Pilih Paket --</option>
-                            <option value="Basic Plan">Basic Plan</option>
-                            <option value="Standard Plan">Standard Plan</option>
-                            <option value="Premium Plan">Premium Plan</option>
-                            <option value="Enterprise Plan">Enterprise Plan</option>
-                        </select>
+                        <label class="block text-[11px] font-semibold text-slate-600 mb-1.5">Nama Paket</label>
+                        <div class="relative">
+                            <select name="plan_name" id="edit-plan-name" class="w-full pl-3 pr-10 py-2.5 rounded-lg border border-emerald-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition bg-white text-slate-700 appearance-none cursor-pointer">
+                                <option value="">-- Pilih --</option>
+                                <option value="Basic Plan">Basic Plan</option>
+                                <option value="Standard Plan">Standard Plan</option>
+                                <option value="Premium Plan">Premium Plan</option>
+                                <option value="Enterprise Plan">Enterprise Plan</option>
+                            </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </div>
+                        </div>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1.5">Durasi Baru (opsional)</label>
-                        <select name="duration_days" id="edit-duration-days" class="w-full px-3 py-2.5 rounded-lg border border-emerald-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition bg-white">
-                            <option value="0">-- Tambah Durasi --</option>
-                            <option value="30">1 Bulan</option>
-                            <option value="90">3 Bulan</option>
-                            <option value="180">6 Bulan</option>
-                            <option value="365">1 Tahun</option>
-                        </select>
+                        <label class="block text-[11px] font-semibold text-slate-600 mb-1.5">Edit Durasi (Reset)</label>
+                        <div class="relative">
+                            <select name="edit_duration_days" id="edit-duration-days" class="w-full pl-3 pr-10 py-2.5 rounded-lg border border-emerald-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition bg-white text-slate-700 appearance-none cursor-pointer">
+                                <option value="0">-- Pilih --</option>
+                                <option value="30">1 Bulan</option>
+                                <option value="90">3 Bulan</option>
+                                <option value="180">6 Bulan</option>
+                                <option value="365">1 Tahun</option>
+                            </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-600 mb-1.5">Tambah Durasi (+)</label>
+                        <div class="relative">
+                            <select name="add_duration_days" id="add-duration-days" class="w-full pl-3 pr-10 py-2.5 rounded-lg border border-emerald-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition bg-white text-slate-700 appearance-none cursor-pointer">
+                                <option value="0">-- Tambah --</option>
+                                <option value="30">+ 1 Bulan</option>
+                                <option value="90">+ 3 Bulan</option>
+                                <option value="180">+ 6 Bulan</option>
+                                <option value="365">+ 1 Tahun</option>
+                            </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-1 sm:col-span-3 pt-1">
+                        <p id="quota-warning-text" class="text-[11px] font-bold text-blue-600">Sisa kuota edit durasi: 4 kali</p>
                     </div>
                 </div>
             </div>
-            <div class="pt-4 flex gap-3">
+
+            <div class="bg-slate-50 rounded-xl px-4 py-3 flex items-center gap-3 border border-slate-200">
+                <svg class="w-4 h-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                <p class="text-xs text-slate-500 font-medium">API Key telah diamankan dan tidak dapat diubah dari sini.</p>
+            </div>
+            
+            <div class="pt-2 flex gap-3">
                 <button type="submit" id="btn-submit-edit" class="flex-1 py-2.5 bg-[#059669] hover:bg-emerald-700 text-white text-sm font-semibold rounded-xl transition flex items-center justify-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                     Simpan Perubahan
@@ -275,6 +327,8 @@ $(document).ready(function() {
               const hasSub = user.subscription && user.subscription.isActive;
               if(hasSub) activeCount++;
               
+              let editQuota = user.editQuota !== undefined ? user.editQuota : 4;
+
               const initials = user.name ? user.name.charAt(0).toUpperCase() : '?';
               const nameHtml = `
                   <div class="flex items-center gap-3">
@@ -288,29 +342,38 @@ $(document).ready(function() {
               
               let subHtml = '<span class="inline-flex px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-500">Tidak ada</span>';
               let planName = '';
+              let endMillis = 0;
+              let currentEndDateStr = 'Tidak ada paket aktif';
+              let durationDays = 0; // Data durasi yang disimpan
+
               if(hasSub) {
-                  const endDate = user.subscription.endDate ? new Date(user.subscription.endDate.toMillis()).toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'}) : '—';
+                  const endObj = user.subscription.endDate;
+                  if(endObj) {
+                      endMillis = endObj.toMillis();
+                      currentEndDateStr = 'Aktif s/d ' + new Date(endMillis).toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'});
+                  }
                   planName = user.subscription.planName;
+                  durationDays = user.subscription.durationDays || 0;
+
                   subHtml = `
                       <div>
                           <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-700">
                               <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>${planName}
                           </span>
-                          <p class="text-[10px] text-slate-400 mt-0.5">s/d ${endDate}</p>
+                          <p class="text-[10px] text-slate-400 mt-0.5">${currentEndDateStr.replace('Aktif ', '')}</p>
                       </div>
                   `;
               }
               
-              // Durasi
               let durasiHtml = '<span class="inline-flex px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-500">—</span>';
-              if(hasSub && user.subscription.endDate) {
-                  const now = new Date();
-                  const end = new Date(user.subscription.endDate.toMillis());
-                  const diffDays = Math.ceil((end - now) / (1000 * 60 * 60 * 24));
+              if(hasSub && endMillis > 0) {
+                  const now = new Date().getTime();
+                  const diffDays = Math.ceil((endMillis - now) / (1000 * 60 * 60 * 24));
                   if(diffDays > 0) {
                       durasiHtml = `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-blue-100 text-blue-700"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>${diffDays} hari</span>`;
                   } else {
                       durasiHtml = `<span class="inline-flex px-2.5 py-1 rounded-full text-[11px] font-bold bg-red-100 text-red-600">Expired</span>`;
+                      currentEndDateStr = 'Sudah Expired';
                   }
               }
 
@@ -318,16 +381,19 @@ $(document).ready(function() {
               if(user.hasApiKey && user.apiKeyHash) {
                   const shortHash = user.apiKeyHash.substring(0, 12) + '...';
                   apiHtml = `
-                      <span class="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-mono bg-slate-100 text-slate-600" title="${user.apiKeyHash}">
-                          <svg class="w-3 h-3 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                          🔒 ${shortHash}
+                      <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-mono bg-slate-100 text-slate-600" title="${user.apiKeyHash}">
+                          <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                          ${shortHash}
                       </span>
                   `;
               }
 
+              const safeName = (user.name || '').replace(/'/g, "\\'");
+              const safeInst = (user.institutionName || '').replace(/'/g, "\\'");
+
               const actionsHtml = `
                   <div class="flex items-center gap-2">
-                      <button onclick="openEditModal('${doc.id}', '${user.name}', '${user.email}', '${user.institutionName || ''}', '${planName}')"
+                      <button onclick="openEditModal('${doc.id}', '${safeName}', '${user.email}', '${safeInst}', '${planName}', '${currentEndDateStr}', ${endMillis}, ${editQuota}, ${durationDays})"
                           class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 transition">
                           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                           Edit
@@ -376,7 +442,6 @@ async function handleAddUser(event) {
         const idHash = await sha256(crypto.randomUUID() + email);
         const passwordHash = await sha256(password);
         
-        // Generate raw API Key, but store hash
         const rawApiKey = generateRandomApiKey();
         const apiKeyHash = await sha256(rawApiKey);
         
@@ -386,10 +451,11 @@ async function handleAddUser(event) {
             institutionType: type,
             name: name,
             email: email,
-            passwordHash: passwordHash, // stored securely
-            apiKeyHash: apiKeyHash,     // stored securely
+            passwordHash: passwordHash,
+            apiKeyHash: apiKeyHash,
             hasApiKey: true,
             institutionName: instName,
+            editQuota: 4, // Beri Kuota Edit Durasi Awal = 4
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
         };
 
@@ -399,14 +465,13 @@ async function handleAddUser(event) {
             data.subscription = {
                 planName: planName,
                 isActive: true,
-                endDate: firebase.firestore.Timestamp.fromDate(endDate)
+                endDate: firebase.firestore.Timestamp.fromDate(endDate),
+                durationDays: durDays // Simpan data durasi
             };
         }
 
-        // Save main user document inside superadmin -> SUPERADMIN_ID -> sekolah -> idHash
         await db.collection('superadmin').doc(SUPERADMIN_ID).collection(type).doc(idHash).set(data);
         
-        // Save to logs subcollection (encrypted)
         const ip = await getIpAddress();
         const encAct = await sha256(`add_sekolah_${email}_${Date.now()}`);
         const encIp = await sha256(ip);
@@ -437,15 +502,45 @@ async function handleAddUser(event) {
     }
 }
 
-function openEditModal(docId, name, email, instName, planName) {
+function openEditModal(docId, name, email, instName, planName, endDateStr, endMillis, editQuota, durationDays) {
     document.getElementById('edit-doc-id').value = docId;
     document.getElementById('edit-name').value = name;
     document.getElementById('edit-email').value = email;
     document.getElementById('edit-email-label').textContent = email;
     document.getElementById('edit-institution').value = instName !== 'undefined' ? instName : '';
     document.getElementById('edit-plan-name').value = planName || '';
-    document.getElementById('edit-duration-days').value = '0';
+    document.getElementById('edit-old-duration').value = durationDays || 0;
+    document.getElementById('edit-quota').value = editQuota || 0;
     document.getElementById('edit-form').password.value = '';
+
+    // Memunculkan data di pilihan Edit Durasi jika data ditemukan
+    let editDurSelect = document.getElementById('edit-duration-days');
+    if (durationDays > 0 && Array.from(editDurSelect.options).some(opt => opt.value == durationDays)) {
+        editDurSelect.value = durationDays;
+    } else {
+        editDurSelect.value = '0';
+    }
+    
+    // Tambah Durasi selalu reset ke 0 agar tidak langsung kepencet
+    document.getElementById('add-duration-days').value = '0';
+
+    const quotaText = document.getElementById('quota-warning-text');
+    quotaText.textContent = `Sisa kuota edit durasi: ${editQuota} kali`;
+    if(editQuota <= 0) {
+        quotaText.className = 'text-[11px] font-bold text-red-600 mt-1';
+    } else {
+        quotaText.className = 'text-[11px] font-bold text-blue-600 mt-1';
+    }
+    
+    const badge = document.getElementById('edit-status-badge');
+    badge.textContent = endDateStr;
+    if(endDateStr.includes('Aktif')) {
+        badge.className = 'text-[10px] bg-emerald-200 text-emerald-800 px-2.5 py-1 rounded-full font-bold';
+    } else if (endDateStr.includes('Expired')) {
+        badge.className = 'text-[10px] bg-red-100 text-red-600 px-2.5 py-1 rounded-full font-bold';
+    } else {
+        badge.className = 'text-[10px] bg-slate-200 text-slate-600 px-2.5 py-1 rounded-full font-bold';
+    }
     
     document.getElementById('edit-modal').classList.remove('hidden');
 }
@@ -462,31 +557,88 @@ async function handleEditUser(event) {
     const password = form.password.value;
     const instName = form.institution_name.value;
     const planName = form.plan_name.value;
-    const durDays = parseInt(form.duration_days.value) || 0;
+    const editDurDays = parseInt(form.edit_duration_days.value) || 0;
+    const addDurDays = parseInt(form.add_duration_days.value) || 0;
+    const currentEndMillis = parseInt(form.current_end_millis.value) || 0;
+    const oldDurDays = parseInt(form.old_duration_days.value) || 0;
+    let editQuota = parseInt(form.edit_quota.value);
+    if (isNaN(editQuota)) editQuota = 4;
+
     const type = 'sekolah';
+
+    // Logika Pintar: Tambah vs Edit
+    let isAdding = addDurDays > 0;
+    let isEditing = !isAdding && (editDurDays > 0 && editDurDays !== oldDurDays);
+
+    // Konfirmasi & Pemotongan Kuota HANYA untuk "Edit Durasi (Reset)"
+    if (isEditing) {
+        if (editQuota <= 0) {
+            Swal.fire('Gagal', 'Sisa kuota edit durasi Anda sudah habis (0). Anda hanya bisa menggunakan opsi Tambah Durasi (+).', 'error');
+            btn.disabled = false;
+            btn.innerText = 'Simpan Perubahan';
+            return;
+        }
+
+        const confirm = await Swal.fire({
+            title: 'Peringatan Edit Durasi',
+            html: `Anda akan mereset masa aktif langganan mulai dari hari ini.<br><br><b>Sisa kuota edit durasi: ${editQuota} kali</b>.<br>Jika dilanjutkan, sisa akan menjadi <b>${editQuota - 1} kali</b>.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#059669',
+            cancelButtonColor: '#ef4444',
+            confirmButtonText: 'Ya, Lanjutkan',
+            cancelButtonText: 'Batal'
+        });
+
+        if (!confirm.isConfirmed) {
+            btn.disabled = false;
+            btn.innerText = 'Simpan Perubahan';
+            return;
+        }
+        
+        editQuota -= 1; // Kurangi Kuota
+    }
 
     try {
         const db = firebase.firestore();
         
-        // update doc
         const updateData = {
             name: name,
-            institutionName: instName
+            institutionName: instName,
+            editQuota: editQuota
         };
         
         if (password) {
             updateData.passwordHash = await sha256(password);
         }
         
-        if (planName && durDays > 0) {
-            const endDate = new Date();
-            endDate.setDate(endDate.getDate() + durDays);
-            updateData.subscription = {
-                planName: planName,
-                isActive: true,
-                endDate: firebase.firestore.Timestamp.fromDate(endDate)
-            };
+        if (planName) {
+            let baseDate = new Date();
+            let newEndDate = baseDate;
+            let finalDurDays = oldDurDays;
+
+            if (isAdding) {
+                // Tambah durasi = tidak memotong kuota
+                if (currentEndMillis > baseDate.getTime()) {
+                    baseDate = new Date(currentEndMillis);
+                }
+                newEndDate = baseDate;
+                newEndDate.setDate(newEndDate.getDate() + addDurDays);
+                finalDurDays = addDurDays;
+                updateData.subscription = { planName: planName, isActive: true, endDate: firebase.firestore.Timestamp.fromDate(newEndDate), durationDays: finalDurDays };
+            } else if (isEditing) {
+                // Edit (Reset) = Potong Kuota
+                newEndDate = new Date();
+                newEndDate.setDate(newEndDate.getDate() + editDurDays);
+                finalDurDays = editDurDays;
+                updateData.subscription = { planName: planName, isActive: true, endDate: firebase.firestore.Timestamp.fromDate(newEndDate), durationDays: finalDurDays };
+            } else if (currentEndMillis > 0) {
+                // Tidak ada durasi yang diubah
+                newEndDate = new Date(currentEndMillis);
+                updateData.subscription = { planName: planName, isActive: true, endDate: firebase.firestore.Timestamp.fromDate(newEndDate), durationDays: finalDurDays };
+            }
         }
+
         await db.collection('superadmin').doc(SUPERADMIN_ID).collection(type).doc(docId).update(updateData);
         
         const ip = await getIpAddress();
