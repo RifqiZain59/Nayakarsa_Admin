@@ -6,7 +6,7 @@ export default function HomePage() {
   const router = useRouter();
   
   useEffect(() => {
-    // Small delay for better transition feel
+    // Memberikan sedikit jeda untuk transisi loading yang lebih halus
     const timer = setTimeout(() => {
       const auth = localStorage.getItem('nyk_auth');
       if (auth) {
@@ -42,16 +42,19 @@ export default function HomePage() {
         marginBottom:'20px',
         boxShadow:'0 0 20px rgba(79, 70, 229, 0.4)'
       }}>N</div>
+      
       <div style={{fontSize:'13px', color:'rgba(255,255,255,0.4)', letterSpacing:'0.1em', textTransform:'uppercase', fontWeight:'700'}}>
         Nayakarsa Admin
       </div>
+      
       <div style={{marginTop:'30px', display:'flex', gap:'5px'}}>
         <div className="dot-bounce" style={{width:'6px', height:'6px', background:'#4f46e5', borderRadius:'50%'}}></div>
         <div className="dot-bounce" style={{width:'6px', height:'6px', background:'#4f46e5', borderRadius:'50%', animationDelay:'0.1s'}}></div>
         <div className="dot-bounce" style={{width:'6px', height:'6px', background:'#4f46e5', borderRadius:'50%', animationDelay:'0.2s'}}></div>
       </div>
       
-      <style jsx>{`
+      {/* Perbaikan: Menghapus atribut 'jsx' agar aman di Next.js App Router */}
+      <style>{`
         @keyframes bounce {
           0%, 100% { transform: translateY(0); opacity: 0.3; }
           50% { transform: translateY(-5px); opacity: 1; }
