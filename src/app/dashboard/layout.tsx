@@ -1,15 +1,17 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { 
-  LayoutDashboard, 
-  Calendar, 
-  QrCode, 
-  Database, 
-  Users, 
-  Settings, 
-  LogOut 
+import {
+  LayoutDashboard,
+  Calendar,
+  QrCode,
+  Database,
+  Users,
+  Settings,
+  LogOut,
+  ShieldCheck,
+  ChevronRight
 } from "lucide-react";
 
 const menuItems = [
@@ -23,86 +25,98 @@ const menuItems = [
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [role, setRole] = useState("");
 
   useEffect(() => {
-    const storedRole = localStorage.getItem("user_role");
+    const storedRole = localStorage.getItem("user_role") || localStorage.getItem("nyk_category");
     if (storedRole) setRole(storedRole);
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("user_role");
-    localStorage.removeItem("user_id");
+    localStorage.clear();
     router.push("/login");
   };
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
-      {/* Sidebar */}
-      <aside className="glass-card" style={{ 
-        width: '260px', 
-        borderRadius: '0', 
-        borderLeft: 'none', 
-        borderTop: 'none', 
-        borderBottom: 'none',
-        display: 'flex',
-        flexDirection: 'column',
-        padding: '2rem 1rem'
-      }}>
-        <div style={{ marginBottom: '2.5rem', padding: '0 1rem' }}>
-          <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--primary)' }}>NAYAKARSA</h2>
-          <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-            {role} PANEL
-          </p>
+    <div className="dashboard-layout">
+      {/* Sidebar memanggil class dashboard-sidebar */}
+      <aside className="dashboard-sidebar">
+
+        {/* HEADER LOGO SIDEBAR - Terkunci dengan .sync-header */}
+        <div className="sync-header" style={{ marginBottom: '3rem', gap: '0.85rem' }}>
+          <div style={{ background: '#4f46e5', height: '48px', width: '48px', borderRadius: '0.75rem', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <ShieldCheck size={28} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <h2 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 800, color: '#1e293b', letterSpacing: '-0.02em', lineHeight: 1 }}>NAYAKARSA</h2>
+            <p style={{ margin: '0.35rem 0 0 0', fontSize: '0.65rem', color: '#10b981', fontWeight: 800, textTransform: 'uppercase', lineHeight: 1 }}>
+              • {role || "Admin"} Panel
+            </p>
+          </div>
         </div>
 
-        <nav style={{ flex: 1 }}>
-          {menuItems.map((item) => (
-            <div 
-              key={item.name}
-              onClick={() => router.push(item.path)}
-              style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '0.75rem', 
-                padding: '0.75rem 1rem', 
-                marginBottom: '0.5rem',
-                borderRadius: '0.5rem',
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-                color: 'var(--text-secondary)'
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.05)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-            >
-              <item.icon size={20} />
-              <span style={{ fontSize: '0.925rem' }}>{item.name}</span>
-            </div>
-          ))}
+        {/* Navigation Menu */}
+        <nav style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+          {menuItems.map((item) => {
+            const isActive = pathname === item.path;
+            return (
+              <div
+                key={item.name}
+                onClick={() => router.push(item.path)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '0.85rem 1rem',
+                  borderRadius: '0.85rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                  background: isActive ? '#4f46e5' : 'transparent',
+                  color: isActive ? '#ffffff' : '#64748b',
+                  boxShadow: isActive ? '0 10px 15px -3px rgba(79, 70, 229, 0.3)' : 'none',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+                  <item.icon size={20} strokeWidth={isActive ? 2.5 : 2} />
+                  <span style={{ fontSize: '0.9rem', fontWeight: isActive ? 600 : 500 }}>{item.name}</span>
+                </div>
+                {isActive && <ChevronRight size={16} />}
+              </div>
+            );
+          })}
         </nav>
 
-        <button 
-          onClick={handleLogout}
-          style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '0.75rem', 
-            padding: '0.75rem 1rem', 
-            background: 'transparent',
-            border: 'none',
-            color: '#f87171',
-            cursor: 'pointer',
-            textAlign: 'left'
-          }}
-        >
-          <LogOut size={20} />
-          <span>Logout</span>
-        </button>
+        {/* Logout */}
+        <div style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid rgba(0,0,0,0.05)' }}>
+          <button
+            onClick={handleLogout}
+            style={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.85rem',
+              padding: '0.85rem 1rem',
+              background: 'rgba(239, 68, 68, 0.05)',
+              border: 'none',
+              borderRadius: '0.85rem',
+              color: '#ef4444',
+              cursor: 'pointer',
+              fontWeight: 600,
+              fontSize: '0.9rem'
+            }}
+          >
+            <LogOut size={20} />
+            <span>Keluar Aplikasi</span>
+          </button>
+        </div>
       </aside>
 
-      {/* Main Content */}
-      <main style={{ flex: 1, padding: '2rem', overflowY: 'auto' }}>
-        {children}
+      {/* Main Content memanggil class dashboard-main */}
+      <main className="dashboard-main">
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          {children}
+        </div>
       </main>
     </div>
   );

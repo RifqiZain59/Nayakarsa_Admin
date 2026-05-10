@@ -23,6 +23,7 @@ body {
   overflow-x: hidden;
 }
 
+/* === KODE LOGIN ASLI ANDA === */
 .split-container {
   display: flex;
   min-height: 100vh;
@@ -31,7 +32,7 @@ body {
 
 .split-left {
   flex: 1;
-  background: #1e1b4b; /* Dark Blue */
+  background: #1e1b4b;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -43,17 +44,17 @@ body {
 
 .split-right {
   flex: 1;
-  background: #ffffff; /* White */
+  background: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 3rem;
-  color: #1e293b; /* Dark text for white bg */
+  color: #1e293b;
 }
 
 .login-form-container {
   width: 100%;
-  maxWidth: 420px;
+  max-width: 420px;
 }
 
 .glass-card {
@@ -106,4 +107,43 @@ body {
   font-weight: 600;
   color: #64748b;
   margin-bottom: 0.5rem;
+}
+
+/* ========================================================= */
+/* === TAMBAHAN CSS DASHBOARD (MENGUNCI POSISI AGAR RATA) === */
+/* ========================================================= */
+
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f8fafc;
+  /* Timpa dark-mode body */
+  background-image: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.05) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.05) 0px, transparent 50%);
+  color: #1e293b;
+}
+
+.dashboard-sidebar {
+  width: 280px;
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  padding: 2.5rem 1.5rem;
+  /* Padding Atas Mutlak */
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  z-index: 50;
+}
+
+.dashboard-main {
+  flex: 1;
+  padding: 2.5rem;
+  /* Padding Atas Mutlak */
+  overflow-y: auto;
+}
+
+/* CLASS KUNCI: Menjamin tinggi header sidebar & konten sama persis */
+.sync-header {
+  height: 48px;
+  display: flex;
+  align-items: center;
 }

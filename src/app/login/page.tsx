@@ -29,11 +29,7 @@ export default function LoginPage() {
         throw new Error("User not found");
       }
 
-      // PERBAIKAN KRUSIAL: Mengecek struktur objek secara aman
-      // Jika manualUser memiliki properti .data (format nested), pakai itu.
-      // Jika tidak ada, berarti datanya langsung berada di dalam manualUser (format flat).
       const userData = manualUser.data || manualUser;
-
       console.log("Data berhasil ditarik. Kategori:", manualUser.category);
 
       const enteredPasswordHash = hashPassword(password);
@@ -42,16 +38,19 @@ export default function LoginPage() {
         // Password Cocok!
         let role = userData.role;
 
-        // Dekripsi role jika bentuknya Base64 / terenkripsi
         if (role && typeof role === 'string' && role.includes("==")) {
           const decryptedRole = decryptData(role);
           if (decryptedRole) role = decryptedRole;
         }
 
-        // Simpan sesi ke LocalStorage
         const finalRole = userData.institutionType || role || manualUser.category || "admin";
+
+        // SIMPAN DATA LOKASI DATABASE
         localStorage.setItem("user_role", finalRole);
         localStorage.setItem("user_id", manualUser.id || userData.id);
+        localStorage.setItem("user_parent_id", manualUser.parentId || "");
+        localStorage.setItem("user_category", manualUser.category || "superadmin");
+        localStorage.setItem("nyk_user_data", JSON.stringify(manualUser));
 
         console.log("Login Sukses! Mengalihkan ke dashboard...");
         router.push("/dashboard");
@@ -77,43 +76,16 @@ export default function LoginPage() {
 
   return (
     <div className="split-container" style={{ display: 'flex', minHeight: '100vh', width: '100%' }}>
-      {/* Left Side: Dark Blue Premium Branding */}
       <div className="split-left" style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0a0a2e', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0.15 }}>
           <div className="grid-bg" style={{
             backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.2) 1px, transparent 0)',
-            backgroundSize: '40px 40px',
-            width: '100%',
-            height: '100%'
+            backgroundSize: '40px 40px', width: '100%', height: '100%'
           }}></div>
         </div>
-
-        <div style={{
-          position: 'absolute',
-          width: '400px',
-          height: '400px',
-          background: 'rgba(99, 102, 241, 0.15)',
-          filter: 'blur(100px)',
-          borderRadius: '50%',
-          top: '20%',
-          left: '20%'
-        }}></div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          style={{ textAlign: 'center', zIndex: 10, padding: '2rem' }}
-        >
-          <div style={{
-            background: 'rgba(255,255,255,0.05)',
-            padding: '1.5rem',
-            borderRadius: '2.5rem',
-            display: 'inline-flex',
-            marginBottom: '2.5rem',
-            backdropFilter: 'blur(12px)',
-            border: '1px solid rgba(255,255,255,0.1)'
-          }}>
+        <div style={{ position: 'absolute', width: '400px', height: '400px', background: 'rgba(99, 102, 241, 0.15)', filter: 'blur(100px)', borderRadius: '50%', top: '20%', left: '20%' }}></div>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} style={{ textAlign: 'center', zIndex: 10, padding: '2rem' }}>
+          <div style={{ background: 'rgba(255,255,255,0.05)', padding: '1.5rem', borderRadius: '2.5rem', display: 'inline-flex', marginBottom: '2.5rem', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.1)' }}>
             <ShieldCheck size={56} color="#6366f1" />
           </div>
           <h1 style={{ fontSize: '3.5rem', fontWeight: 800, marginBottom: '1rem', letterSpacing: '-0.02em', color: '#fff' }}>
@@ -125,29 +97,16 @@ export default function LoginPage() {
         </motion.div>
       </div>
 
-      {/* Right Side: Clean White Login Form */}
       <div className="split-right" style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem', background: '#ffffff' }}>
         <div className="login-form-container" style={{ width: '100%', maxWidth: '420px' }}>
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-          >
+          <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}>
             <div style={{ marginBottom: '3rem' }}>
               <h2 style={{ fontSize: '2.25rem', fontWeight: 800, color: '#1e293b', marginBottom: '0.75rem' }}>Administrator Login</h2>
               <p style={{ color: '#64748b', fontSize: '1.05rem' }}>Gunakan kredensial terenkripsi Anda untuk masuk.</p>
             </div>
 
             {error && (
-              <div style={{
-                background: '#fef2f2',
-                color: '#dc2626',
-                padding: '1rem 1.25rem',
-                borderRadius: '0.75rem',
-                marginBottom: '2rem',
-                fontSize: '0.9rem',
-                border: '1px solid #fee2e2'
-              }}>
+              <div style={{ background: '#fef2f2', color: '#dc2626', padding: '1rem 1.25rem', borderRadius: '0.75rem', marginBottom: '2rem', fontSize: '0.9rem', border: '1px solid #fee2e2' }}>
                 {error}
               </div>
             )}
@@ -155,50 +114,13 @@ export default function LoginPage() {
             <form onSubmit={handleLogin}>
               <div style={{ marginBottom: '1.5rem', width: '100%' }}>
                 <label className="input-label" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: '#475569' }}>Alamat Email</label>
-                <input
-                  type="email"
-                  className="input-field"
-                  style={{ width: '100%', boxSizing: 'border-box', padding: '0.875rem 1rem', borderRadius: '0.5rem', border: '1px solid #cbd5e1', outline: 'none' }}
-                  placeholder="admin@nayakarsa.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
+                <input type="email" className="input-field" style={{ width: '100%', boxSizing: 'border-box', padding: '0.875rem 1rem', borderRadius: '0.5rem', border: '1px solid #cbd5e1', outline: 'none' }} placeholder="admin@nayakarsa.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
               </div>
-
               <div style={{ marginBottom: '2.5rem', width: '100%' }}>
                 <label className="input-label" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: '#475569' }}>Password</label>
-                <input
-                  type="password"
-                  className="input-field"
-                  style={{ width: '100%', boxSizing: 'border-box', padding: '0.875rem 1rem', borderRadius: '0.5rem', border: '1px solid #cbd5e1', outline: 'none' }}
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
+                <input type="password" className="input-field" style={{ width: '100%', boxSizing: 'border-box', padding: '0.875rem 1rem', borderRadius: '0.5rem', border: '1px solid #cbd5e1', outline: 'none' }} placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required />
               </div>
-
-              <button
-                type="submit"
-                className="btn-primary"
-                style={{
-                  width: '100%',
-                  padding: '1.125rem',
-                  fontSize: '1rem',
-                  fontWeight: 700,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '0.75rem',
-                  background: '#4f46e5',
-                  color: '#ffffff',
-                  borderRadius: '0.5rem',
-                  border: 'none',
-                  cursor: 'pointer'
-                }}
-                disabled={loading}
-              >
+              <button type="submit" className="btn-primary" disabled={loading} style={{ width: '100%', padding: '1.125rem', fontSize: '1rem', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', background: '#4f46e5', color: '#ffffff', borderRadius: '0.5rem', border: 'none', cursor: 'pointer' }}>
                 {loading ? "Memverifikasi..." : "Masuk Sekarang"}
               </button>
             </form>
